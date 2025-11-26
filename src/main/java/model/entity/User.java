@@ -1,12 +1,16 @@
 package model.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
     @Id
@@ -20,4 +24,8 @@ public class User {
     @Column(name = "password", length = 50)
     private String password;
 
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
 }

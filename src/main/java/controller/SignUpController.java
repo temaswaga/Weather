@@ -1,43 +1,34 @@
 package controller;
 
-import model.dto.SignupDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import model.dto.SignUpDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import service.SessionService;
 import service.UserService;
 
 @Controller
-public class SignupController {
+public class SignUpController {
     private final UserService userService;
 
-    @Autowired
-    public SignupController(UserService userService) {
+    public SignUpController(UserService userService) {
         this.userService = userService;
     }
 
+
     @GetMapping("/sign-up")
     public String getSignupPage(Model model) {
-        model.addAttribute("user", new SignupDto());
+        model.addAttribute("user", new SignUpDto());
         return "sign-up";
     }
 
     @PostMapping("/sign-up")
-    public String signupSubmit(@ModelAttribute SignupDto userDto, Model model) {
-        System.out.println("Username: " + userDto.getUsername());
-        System.out.println("Password: " + userDto.getPassword());
-        System.out.println("Repeat: " + userDto.getRepeatPassword());
+    public String signupSubmit(@ModelAttribute SignUpDto signUpDto, Model model) {
 
-        if (!userDto.getPassword().equals(userDto.getRepeatPassword())) {
-            model.addAttribute("error", "Пароли не совпадают!");
-            return "sign-up-with-errors";
-        }
+        userService.save(signUpDto);
 
-        // Здесь сохраняй пользователя
-        // userService.save(userDto);
-
-        return "redirect:/sign-in";  // редирект после успешной регистрации
+        return "redirect:/sign-in";
     }
 }

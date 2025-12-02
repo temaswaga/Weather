@@ -1,16 +1,12 @@
 package model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Table(name = "users")
 public class User {
     @Id
@@ -21,11 +17,6 @@ public class User {
     @Column(name = "login", length = 15)
     private String login;
 
-    @Column(name = "password", length = 50)
+    @Column(name = "password", length = 70)
     private String password;
-
-    public User(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
 }

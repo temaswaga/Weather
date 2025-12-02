@@ -13,7 +13,7 @@ import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"controller", "service", "repository"})
+@ComponentScan(basePackages = {"controller"})
 public class WebConfig implements WebMvcConfigurer {
 
     @Bean
@@ -43,7 +43,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.viewResolver(resolver);
     }
 
-    // Статические ресурсы (CSS, JS, изображения)
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/css/**")
@@ -52,5 +51,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("/WEB-INF/js/");
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("/WEB-INF/images/");
+        registry.addResourceHandler("/resources/**")
+                .addResourceLocations("classpath:/");
     }
 }

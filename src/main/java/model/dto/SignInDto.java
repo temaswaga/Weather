@@ -8,8 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-public class SignUpDto {
+public class SignInDto {
     private String username;
     private String password;
-    private String repeatPassword;
 }

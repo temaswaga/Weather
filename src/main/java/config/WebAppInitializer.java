@@ -6,12 +6,12 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] { RootConfig.class };
+        return new Class[] { DatabaseConfig.class };
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] { config.WebConfig.class };
+        return new Class[] { WebConfig.class };
     }
 
     @Override
@@ -19,8 +19,4 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         return new String[] { "/" };
     }
 
-    @Override
-    protected String getServletName() {
-        return "dispatcher";
-    }
 }

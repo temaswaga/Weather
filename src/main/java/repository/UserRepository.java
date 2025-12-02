@@ -1,19 +1,20 @@
 package repository;
 
 import model.entity.User;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
-import util.HibernateSessionFactoryUtil;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional
 public class UserRepository {
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     public void save(User user) {
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()){
-            session.beginTransaction();
-            session.persist(user);
-        }
+        entityManager.persist(user);
     }
 
 }

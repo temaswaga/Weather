@@ -1,18 +1,14 @@
 package model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Table(name = "locations")
 public class Location {
     @Id
@@ -24,7 +20,7 @@ public class Location {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "users", referencedColumnName = "id")
+    @JoinColumn(name = "userid", referencedColumnName = "id")
     private User userid;
 
     @Column(name = "latitude")
@@ -32,11 +28,4 @@ public class Location {
 
     @Column(name = "longitude")
     private BigDecimal longitude;
-
-    public Location(String name, User userid, BigDecimal latitude, BigDecimal longitude) {
-        this.name = name;
-        this.userid = userid;
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
 }

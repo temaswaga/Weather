@@ -2,7 +2,6 @@ package mapper;
 
 import model.dto.SignInDto;
 import model.entity.User;
-import repository.SessionRepository;
 
 public class UserMapper {
 

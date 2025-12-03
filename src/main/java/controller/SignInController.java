@@ -11,17 +11,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import service.AuthService;
+import service.CookieService;
 import service.SessionService;
 
 
 @Controller
 public class SignInController {
-    private final SessionService sessionService;
-
     @Autowired
-    public SignInController(SessionService sessionService) {
-        this.sessionService = sessionService;
-    }
+    private CookieService cookieService;
+    @Autowired
+    private SessionService sessionService;
+    @Autowired
+    private AuthService authService;
 
     @GetMapping("/sign-in")
     public String getLoginPage(@ModelAttribute SignInDto signInDto, HttpServletResponse response){
@@ -29,21 +31,25 @@ public class SignInController {
     }
 
     @PostMapping("/sign-in")
-    public String signinSubmit(@ModelAttribute SignInDto signInDto, HttpServletResponse response) {
+    public String signinSubmit(@ModelAttribute SignInDto signInDto, HttpServletResponse response, Model model) {
 
-        // валидация - верный ли пароль и логин
+        try {
+            authService.verifyPassword(signInDto);
+            Session session = sessionService.createSession(signInDto);
 
-        Session session = sessionService.createSession(signInDto);
+            if (session != null) {
 
-        if (session != null) {
-            Cookie sessionCookie = new Cookie("MY_SESSION_ID", session.getId().toString());
-            sessionCookie.setMaxAge(2 * 60 * 60);
-            sessionCookie.setPath("/");
-            sessionCookie.setHttpOnly(true);
-            response.addCookie(sessionCookie);
+                cookieService.setSessionIntoCookie(session, response);
 
-            return "redirect:/home";
-        } else {
+                return "redirect:/home";
+            } else {
+                return "sign-in-with-errors";
+            }
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+
+            model.addAttribute("lastUsername", signInDto.getUsername());
+
             return "sign-in-with-errors";
         }
     }

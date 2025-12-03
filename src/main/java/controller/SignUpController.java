@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import service.AuthService;
-import service.SessionService;
-import service.UserService;
 
 @Controller
 public class SignUpController {
@@ -25,7 +23,7 @@ public class SignUpController {
     @PostMapping("/sign-up")
     public String signupSubmit(@ModelAttribute SignUpDto signUpDto, Model model) {
 
-        authService.save(signUpDto);
+        authService.saveUserToDb(signUpDto);
 
         return "redirect:/sign-in";
     }

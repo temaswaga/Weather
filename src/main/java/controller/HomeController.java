@@ -13,13 +13,8 @@ import java.util.UUID;
 
 @Controller
 public class HomeController {
-
-    private final UserService userService;
-
     @Autowired
-    public HomeController(UserService userService) {
-        this.userService = userService;
-    }
+    private UserService userService;
 
     @GetMapping("/")
     public String home(@CookieValue(value = "MY_SESSION_ID", required = false) String sessionId, Model model) {

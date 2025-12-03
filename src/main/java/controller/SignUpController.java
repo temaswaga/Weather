@@ -1,22 +1,20 @@
 package controller;
 
 import model.dto.SignUpDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import service.AuthService;
 import service.SessionService;
 import service.UserService;
 
 @Controller
 public class SignUpController {
-    private final UserService userService;
-
-    public SignUpController(UserService userService) {
-        this.userService = userService;
-    }
-
+    @Autowired
+    private AuthService authService;
 
     @GetMapping("/sign-up")
     public String getSignupPage(Model model) {
@@ -27,7 +25,7 @@ public class SignUpController {
     @PostMapping("/sign-up")
     public String signupSubmit(@ModelAttribute SignUpDto signUpDto, Model model) {
 
-        userService.save(signUpDto);
+        authService.save(signUpDto);
 
         return "redirect:/sign-in";
     }

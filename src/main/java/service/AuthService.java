@@ -1,6 +1,7 @@
 package service;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import model.dto.SignInDto;
 import model.dto.SignUpDto;
 import model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ public class AuthService {
     private UserRepository userRepository;
 
     @Transactional
-    public void save(SignUpDto signUpDto) {
+    public void saveUserToDb(SignUpDto signUpDto) {
         User user = new User();
 
         String password = signUpDto.getPassword();
@@ -26,5 +27,22 @@ public class AuthService {
 
         userRepository.save(user);
     }
+
+    public boolean verifyPassword(SignInDto signInDto) {
+        User user = userRepository.getByLogin(signInDto.getUsername());
+
+        if (user == null) {
+            throw new RuntimeException("User is not found");
+        }
+
+        String hashedPassword = user.getPassword();
+        String rawPassword = signInDto.getPassword();
+
+        BCrypt.Result result = BCrypt.verifyer().verify(rawPassword.toCharArray(), hashedPassword.toCharArray());
+
+        return result.verified;
+    }
+
+
 
 }

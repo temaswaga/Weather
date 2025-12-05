@@ -14,12 +14,15 @@ import repository.UserRepository;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
+    private final SessionService sessionService;
+    private final UserRepository userRepository;
+
     @Autowired
-    private SessionService sessionService;
-    @Autowired
-    private UserRepository userRepository;
+    public UserService(SessionService sessionService, UserRepository userRepository) {
+        this.sessionService = sessionService;
+        this.userRepository = userRepository;
+    }
 
     public boolean arePasswordsEqual(String password, String repeatedPassword) {
         return password.equals(repeatedPassword);

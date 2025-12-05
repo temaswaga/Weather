@@ -35,4 +35,12 @@ public class UserRepository {
                 .setParameter("loginParam", login)
                 .getSingleResult();
     }
+
+    public boolean loginExists(String login) {
+        String jpql = "SELECT u FROM User u WHERE u.login = :loginParam";
+
+        return entityManager.createQuery(jpql, User.class)
+                .setParameter("loginParam", login)
+                .getSingleResult() != null;
+    }
 }

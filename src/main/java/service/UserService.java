@@ -30,6 +30,6 @@ public class UserService {
 
     public User getUserBySessionId(UUID sessionId) {
         Session session = sessionService.getSessionBySessionId(sessionId);
-        return userRepository.getById(session.getUserid());
+        return userRepository.getById(session.getUserid().getId());
     }
 }

@@ -1,6 +1,5 @@
 package controller;
 
-import jakarta.servlet.http.HttpServletResponse;
 import model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +19,7 @@ public class HomeController {
         this.userService = userService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public String home(@CookieValue(value = "MY_SESSION_ID", required = false) String sessionId, Model model) {
 
         if (sessionId == null) {

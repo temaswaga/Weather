@@ -20,11 +20,11 @@ public class UserRepository {
         entityManager.persist(user);
     }
 
-    public User getById(User userId) {
+    public User getById(Integer id) {
         String jpql = "SELECT u FROM User u WHERE u.id = :idParam";
 
         return entityManager.createQuery(jpql, User.class)
-                .setParameter("idParam", userId)
+                .setParameter("idParam", id)
                 .getSingleResult();
     }
 
@@ -33,14 +33,14 @@ public class UserRepository {
 
         return entityManager.createQuery(jpql, User.class)
                 .setParameter("loginParam", login)
-                .getSingleResult();
+                .getSingleResultOrNull();
     }
 
-    public boolean loginExists(String login) {
+    public User loginExists(String login) {
         String jpql = "SELECT u FROM User u WHERE u.login = :loginParam";
 
         return entityManager.createQuery(jpql, User.class)
                 .setParameter("loginParam", login)
-                .getSingleResult() != null;
+                .getSingleResultOrNull();
     }
 }

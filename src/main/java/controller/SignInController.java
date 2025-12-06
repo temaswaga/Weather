@@ -1,10 +1,8 @@
 package controller;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import model.dto.SignInDto;
-import model.dto.SignUpDto;
 import model.entity.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,20 +39,20 @@ public class SignInController {
     public String signinSubmit(@ModelAttribute("signInDto") @Valid SignInDto signInDto, HttpServletResponse response, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
-            return "sign-in";
+            return "sign-in-with-errors";
         }
 
-        try {
-            authService.verifyPassword(signInDto);
+        if (authService.isPasswordValid(signInDto)) {
             Session session = sessionService.createSession(signInDto);
-
             cookieService.setSessionIntoCookie(session, response);
 
             return "redirect:/home";
-        } catch (Exception e) {
-
+        } else {
+            bindingResult.rejectValue("password", "password.invalid");
             return "sign-in-with-errors";
         }
+
+
     }
-    
+
 }

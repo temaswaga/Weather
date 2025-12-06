@@ -3,10 +3,11 @@ package repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import model.entity.Session;
-import model.entity.User;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Repository
@@ -26,6 +27,19 @@ public class SessionRepository {
         return entityManager.createQuery(jpql, Session.class)
                 .setParameter("idParam", sessionId)
                 .getSingleResult();
+    }
+
+    @Scheduled(fixedRate = 5 * 60 * 1000)
+    public void deleteExpiredSessions() {
+        System.out.println("Deleting session at " + LocalDateTime.now());
+
+        LocalDateTime now = LocalDateTime.now();
+        String jpql = "DELETE FROM Session s WHERE s.expiresat < :now";
+
+        entityManager
+            .createQuery(jpql)
+            .setParameter("now", now)
+            .executeUpdate();
     }
 
 }

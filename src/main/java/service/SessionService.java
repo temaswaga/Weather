@@ -1,5 +1,7 @@
 package service;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import mapper.UserMapper;
 import model.dto.SignInDto;
 import model.entity.Session;
@@ -45,4 +47,7 @@ public class SessionService{
     public Session getSessionBySessionId(UUID sessionId) {
         return sessionRepository.getById(sessionId);
     }
+
+
+
 }

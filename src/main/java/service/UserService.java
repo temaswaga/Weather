@@ -24,12 +24,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public boolean arePasswordsEqual(String password, String repeatedPassword) {
-        return password.equals(repeatedPassword);
-    }
-
-    public User getUserBySessionId(UUID sessionId) {
-        Session session = sessionService.getSessionBySessionId(sessionId);
+    public User getUserBySessionId(String sessionId) {
+        Session session = sessionService.getSessionBySessionId(UUID.fromString(sessionId));
         return userRepository.getById(session.getUserid().getId());
     }
 }

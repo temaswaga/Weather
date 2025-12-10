@@ -31,7 +31,7 @@ public class SessionRepository {
 
     @Scheduled(fixedRate = 5 * 60 * 1000)
     public void deleteExpiredSessions() {
-        System.out.println("Deleting session at " + LocalDateTime.now());
+        System.out.println("Deleting expired sessions at " + LocalDateTime.now());
 
         LocalDateTime now = LocalDateTime.now();
         String jpql = "DELETE FROM Session s WHERE s.expiresat < :now";
@@ -40,6 +40,15 @@ public class SessionRepository {
             .createQuery(jpql)
             .setParameter("now", now)
             .executeUpdate();
+    }
+
+    public void deleteSessionById(UUID sessionId) {
+        String jpql = "DELETE FROM Session s WHERE s.id = :idParam";
+
+        entityManager
+                .createQuery(jpql)
+                .setParameter("idParam", sessionId)
+                .executeUpdate();
     }
 
 }

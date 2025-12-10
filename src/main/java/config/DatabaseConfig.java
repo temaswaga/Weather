@@ -15,6 +15,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"service", "repository"})
+@PropertySource("classpath:properties/application.properties")
 @Import(FlywayConfig.class)
 public class DatabaseConfig {
 

@@ -3,6 +3,7 @@ package config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -50,7 +51,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/js/**")
                 .addResourceLocations("/WEB-INF/js/");
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("/WEB-INF/images/");
+                .addResourceLocations("classpath:/static/images/");
         registry.addResourceHandler("/resources/**")
                 .addResourceLocations("classpath:/");
     }

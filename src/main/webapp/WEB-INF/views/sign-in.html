@@ -19,7 +19,7 @@
 
     <div class="row justify-content-center">
         <div class="col-12 col-lg-4 col-md-6 col-sm-12">
-            <form th:action="@{/sign-in}" method="post" th:object="${signInDto}">
+            <form th:action="@{/sign-in}" method="post" th:object="${signInDto}" novalidate>
 
                 <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
                     <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
@@ -39,7 +39,8 @@
                     <div class="invalid-feedback" th:errors="*{password}"></div>
                 </div>
 
-                <div class="d-grid gap-2"> <button type="submit" class="btn btn-primary">Sign In</button>
+                <div class="d-grid gap-2"> <button type="submit" class="btn btn-primary"
+                                                   onclick="return validateForm()">Sign In</button>
                 </div>
                 <p class="mt-2 text-center">Don't have an account? <a href="sign-up">Sign up here</a></p>
             </form>
@@ -48,4 +49,17 @@
 </div>
 
 </body>
+
+<script>
+    function validateForm() {
+        const username = document.querySelector('[name="username"]').value;
+        const password = document.querySelector('[name="password"]').value;
+
+        if (!username || !password) {
+            alert("Please fill in both fields");
+            return false; // предотвращает отправку
+        }
+        return true;
+    }
+</script>
 </html>

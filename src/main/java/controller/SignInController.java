@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import service.AuthService;
 import service.CookieService;
+import service.LocationService;
 import service.SessionService;
 
 
@@ -23,20 +24,21 @@ public class SignInController {
     private final AuthService authService;
 
     @Autowired
-    public SignInController(CookieService cookieService, SessionService sessionService, AuthService authService) {
+    public SignInController(CookieService cookieService, SessionService sessionService, AuthService authService, LocationService locationService) {
         this.cookieService = cookieService;
         this.sessionService = sessionService;
         this.authService = authService;
     }
 
     @GetMapping("/sign-in")
-    public String getLoginPage(@ModelAttribute SignInDto signInDto, HttpServletResponse response, Model model) {
-        model.addAttribute("SignInDto", signInDto);
+    public String getLoginPage(@ModelAttribute("signInDto") SignInDto signInDto, Model model) {
+
+
         return "sign-in";
     }
 
     @PostMapping("/sign-in")
-    public String signinSubmit(@ModelAttribute("signInDto") @Valid SignInDto signInDto, HttpServletResponse response, BindingResult bindingResult, Model model) {
+    public String signInSubmit(@ModelAttribute("signInDto") @Valid SignInDto signInDto, HttpServletResponse response, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             return "sign-in-with-errors";
@@ -46,7 +48,7 @@ public class SignInController {
             Session session = sessionService.createSession(signInDto);
             cookieService.setSessionIntoCookie(session, response);
 
-            return "redirect:/home";
+            return "redirect:/";
         } else {
             bindingResult.rejectValue("password", "password.invalid");
             return "sign-in-with-errors";

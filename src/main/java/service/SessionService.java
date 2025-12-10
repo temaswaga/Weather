@@ -2,6 +2,7 @@ package service;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import mapper.UserMapper;
 import model.dto.SignInDto;
 import model.entity.Session;
@@ -16,14 +17,12 @@ import repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class SessionService{
     private final UserMapper userMapper =  new UserMapper();
-    @Autowired
-    private SessionRepository sessionRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final SessionRepository sessionRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Session createSession(SignInDto signInDto) {
@@ -48,6 +47,8 @@ public class SessionService{
         return sessionRepository.getById(sessionId);
     }
 
-
+    public void deleteSession(String sessionId) {
+        sessionRepository.deleteSessionById(UUID.fromString(sessionId));
+    }
 
 }

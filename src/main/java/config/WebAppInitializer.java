@@ -1,12 +1,13 @@
 package config;
 
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] { DatabaseConfig.class };
+        return new Class[] { DatabaseConfig.class, SchedulerConfig.class };
     }
 
     @Override

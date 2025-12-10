@@ -1,6 +1,15 @@
+
 body {
-    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Минимальная высота = 100% высоты окна браузера */
 }
+
+/* Основной контент (section) должен растягиваться и занимать всё свободное место */
+#page-content {
+    flex: 1;
+}
+
 
 section#page-content {
     min-height: calc(100vh - 164px);

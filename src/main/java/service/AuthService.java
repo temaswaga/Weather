@@ -1,21 +1,22 @@
 package service;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import lombok.RequiredArgsConstructor;
 import model.dto.SignInDto;
 import model.dto.SignUpDto;
 import model.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import repository.UserRepository;
+import util.validation.SignUpPasswordValidation;
 
+import java.util.Objects;
+
+@RequiredArgsConstructor
 @Service
 public class AuthService {
-    @Autowired
-    private SessionService sessionService;
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public void saveUserToDb(SignUpDto signUpDto) {
@@ -31,7 +32,7 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public boolean isPasswordValid(SignInDto signInDto) {
+    public boolean isPasswordCorrect(SignInDto signInDto) {
         User user = userRepository.getByLogin(signInDto.getUsername());
 
         if (user == null) {
@@ -51,6 +52,10 @@ public class AuthService {
         if (userRepository.loginExists(user.getUsername()) != null) {
             bindingResult.rejectValue("username", "error.username.exists", "Username already exists");
             return false;
+        }
+
+        if (SignUpPasswordValidation.validate(user.getPassword()) != null) {
+            bindingResult.rejectValue("password", "error.password.valid", Objects.requireNonNull(SignUpPasswordValidation.validate(user.getPassword())));
         }
 
         if (!user.getPassword().equals(user.getRepeatedPassword())) {

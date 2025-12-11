@@ -1,17 +1,13 @@
 package service;
 
 import lombok.RequiredArgsConstructor;
-import mapper.LocationMapper;
+import util.mapper.LocationMapper;
 import model.dto.LocationDto;
-import model.dto.WeatherResponseDto;
+import model.dto.WeatherDto;
 import model.entity.Location;
 import model.entity.User;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 import repository.LocationRepository;
 
 import java.util.*;
@@ -30,14 +26,24 @@ public class LocationService {
         return LocationMapper.toDtoList(locationEntities);
     }
 
-        public List<WeatherResponseDto> getUsersLocationsWithWeatherBySessionId(String sessionId) {
-        List<WeatherResponseDto> weatherResponseDtos = new ArrayList<>();
+        public List<WeatherDto> getUsersLocationsWithWeatherBySessionId(String sessionId) {
+        List<WeatherDto> weatherDtos = new ArrayList<>();
+        List<LocationDto> savedLocations = getUsersLocationsBySessionId(sessionId);
 
-        for (LocationDto location : getUsersLocationsBySessionId(sessionId)) {
-            weatherResponseDtos.add(weatherApiService.getWeather(location.getLat(), location.getLon()));
+        for (LocationDto location : savedLocations) {
+            WeatherDto weather = weatherApiService.getWeather(location.getLat(), location.getLon());
+
+            if (weather == null) {
+                weather = new WeatherDto();
+            }
+
+            weather.setId(location.getId());      // Чтобы работала кнопка удаления!
+            weather.setName(location.getName());  // Чтобы было правильное имя
+
+            weatherDtos.add(weather);
         }
 
-        return weatherResponseDtos;
+        return weatherDtos;
     }
 
     @Transactional
@@ -47,6 +53,10 @@ public class LocationService {
         location.setUserid(userId);
 
         locationRepository.save(location);
+    }
+
+    public void deleteLocation(long id){
+        locationRepository.deleteLocation(id);
     }
 }
 

@@ -1,4 +1,4 @@
-package mapper;
+package util.mapper;
 
 import model.dto.LocationDto;
 import model.entity.Location;
@@ -22,6 +22,7 @@ public class LocationMapper {
 
         for (Location entity : locationEntities) {
             LocationDto dto = new LocationDto();
+            dto.setId(entity.getId());
             dto.setName(entity.getName());
             dto.setLat(entity.getLatitude());
             dto.setLon(entity.getLongitude());

@@ -1,8 +1,8 @@
 package repository;
 
+import exceptions.EmptyResultDataAccessException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import model.entity.Location;
 import model.entity.User;
 import org.springframework.stereotype.Repository;
@@ -24,9 +24,20 @@ public class LocationRepository {
     public List<Location> getUsersLocations(User userId) {
         String jpql = "SELECT l FROM Location l WHERE l.userid = :idParam";
 
-        Query query = entityManager.createQuery(jpql);
-        query.setParameter("idParam", userId);
-        return query.getResultList();
+        return entityManager
+                .createQuery(jpql, Location.class)
+                .setParameter("idParam", userId)
+                .getResultList();
+    }
+
+    public void deleteLocation(long id) {
+        Location location = entityManager.find(Location.class, id);
+
+        if (location != null) {
+            entityManager.remove(location);
+        } else {
+            throw new EmptyResultDataAccessException("Location not found");
+        }
     }
 
 

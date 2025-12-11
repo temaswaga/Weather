@@ -26,7 +26,7 @@ public class SessionRepository {
 
         return entityManager.createQuery(jpql, Session.class)
                 .setParameter("idParam", sessionId)
-                .getSingleResult();
+                .getSingleResultOrNull();
     }
 
     @Scheduled(fixedRate = 5 * 60 * 1000)

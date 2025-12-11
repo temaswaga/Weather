@@ -2,8 +2,7 @@ package service;
 
 import lombok.RequiredArgsConstructor;
 import model.dto.LocationDto;
-import model.dto.WeatherResponseDto;
-import model.entity.Location;
+import model.dto.WeatherDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -26,16 +24,6 @@ public class WeatherApiService {
 
     private static final String GEO_API_URL = "https://api.openweathermap.org/geo/1.0/direct";
     private static final String WEATHER_API_URL = "https://api.openweathermap.org/data/2.5/weather";
-
-//    public List<WeatherResponseDto> getUsersLocationsWeatherBySessionId(String sessionId) {
-//        List<WeatherResponseDto> weatherResponseDtos = new ArrayList<>();
-//
-//        for (LocationDto location : locationService.getUsersLocationsBySessionId(sessionId)) {
-//            weatherResponseDtos.add(getWeather(location.getLat(), location.getLon()));
-//        }
-//
-//        return weatherResponseDtos;
-//    }
 
     public List<LocationDto> findLocations(String query) {
         String url = UriComponentsBuilder.fromHttpUrl(GEO_API_URL)
@@ -57,12 +45,13 @@ public class WeatherApiService {
 
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("No connection to API");
         }
 
         return Collections.emptyList();
     }
 
-    public WeatherResponseDto getWeather(BigDecimal latitude, BigDecimal longitude) {
+    public WeatherDto getWeather(BigDecimal latitude, BigDecimal longitude) {
         String url = UriComponentsBuilder.fromHttpUrl(WEATHER_API_URL)
                 .queryParam("lat", latitude)
                 .queryParam("lon", longitude)
@@ -71,9 +60,9 @@ public class WeatherApiService {
                 .toUriString();
 
         try {
-            ResponseEntity<WeatherResponseDto> response = restTemplate.getForEntity(
+            ResponseEntity<WeatherDto> response = restTemplate.getForEntity(
                     url,
-                    WeatherResponseDto.class
+                    WeatherDto.class
             );
 
             if (response.getBody() != null) {
@@ -82,6 +71,8 @@ public class WeatherApiService {
 
         } catch (Exception e) {
             e.printStackTrace();
+
+            System.out.println("No connection to API");
         }
         return null;
     }

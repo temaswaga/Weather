@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LocationDto {
+    private long id;
     private String name;
 
     @JsonProperty("local_names")

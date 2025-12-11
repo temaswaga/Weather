@@ -1,14 +1,10 @@
 package service;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import mapper.UserMapper;
 import model.dto.SignInDto;
 import model.entity.Session;
 import model.entity.User;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import repository.SessionRepository;
@@ -20,7 +16,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class SessionService{
-    private final UserMapper userMapper =  new UserMapper();
     private final SessionRepository sessionRepository;
     private final UserRepository userRepository;
 

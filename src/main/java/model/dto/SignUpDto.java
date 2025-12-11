@@ -15,7 +15,7 @@ public class SignUpDto {
     @Size(min = 3, max = 15, message = "Username must be between 2 and 30 characters")
     private String username;
     @NotEmpty(message = "Password cannot be empty")
-    @Size(min = 4, message = "Password must be at least 4 characters long")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
     private String repeatedPassword;

@@ -6,7 +6,6 @@ import model.dto.SignInDto;
 import model.entity.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -31,20 +30,18 @@ public class SignInController {
     }
 
     @GetMapping("/sign-in")
-    public String getLoginPage(@ModelAttribute("signInDto") SignInDto signInDto, Model model) {
-
-
+    public String getLoginPage(@ModelAttribute("signInDto") SignInDto signInDto) {
         return "sign-in";
     }
 
     @PostMapping("/sign-in")
-    public String signInSubmit(@ModelAttribute("signInDto") @Valid SignInDto signInDto, HttpServletResponse response, BindingResult bindingResult, Model model) {
+    public String signInSubmit(@ModelAttribute("signInDto") @Valid SignInDto signInDto, HttpServletResponse response, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return "sign-in-with-errors";
         }
 
-        if (authService.isPasswordValid(signInDto)) {
+        if (authService.isPasswordCorrect(signInDto)) {
             Session session = sessionService.createSession(signInDto);
             cookieService.setSessionIntoCookie(session, response);
 
@@ -53,8 +50,5 @@ public class SignInController {
             bindingResult.rejectValue("password", "password.invalid");
             return "sign-in-with-errors";
         }
-
-
     }
-
 }

@@ -1,5 +1,7 @@
 package controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import model.dto.LocationDto;
 import org.springframework.stereotype.Controller;
@@ -8,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import service.LocationService;
 import service.UserService;
 import service.WeatherApiService;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class WeatherController {
     private final WeatherApiService weatherApiService;
 
     @GetMapping("/")
-    public String index(@CookieValue(value = "MY_SESSION_ID", required = false) String sessionId, Model model) {
+    public String index(HttpServletResponse response, @CookieValue(value = "MY_SESSION_ID", required = false) String sessionId, Model model) {
         if (sessionId != null) {
             model.addAttribute("user", userService.getUserBySessionId(sessionId));
             model.addAttribute("locations", locationService.getUsersLocationsWithWeatherBySessionId(sessionId));
@@ -40,8 +41,15 @@ public class WeatherController {
     }
 
     @PostMapping("/location/add")
-    public String addLocation(@ModelAttribute("locationDto") LocationDto locationDto, @CookieValue(value = "MY_SESSION_ID", required = false) String sessionId, Model model) {
+    public String addLocation(@ModelAttribute("locationDto") LocationDto locationDto, @CookieValue(value = "MY_SESSION_ID", required = false) String sessionId) {
         locationService.addLocation(locationDto, sessionId);
         return "redirect:/";
     }
+
+    @PostMapping("/location/delete")
+    public String deleteLocation(@RequestParam("locationId") long id) {
+        locationService.deleteLocation(id);
+        return "redirect:/";
+    }
+
 }

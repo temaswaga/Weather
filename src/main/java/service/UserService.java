@@ -1,14 +1,10 @@
 package service;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
-import lombok.RequiredArgsConstructor;
-import model.dto.SignUpDto;
+import exceptions.InvalidSessionException;
 import model.entity.Session;
 import model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import repository.SessionRepository;
 import repository.UserRepository;
 
 import java.util.UUID;
@@ -26,6 +22,10 @@ public class UserService {
 
     public User getUserBySessionId(String sessionId) {
         Session session = sessionService.getSessionBySessionId(UUID.fromString(sessionId));
+        if (session == null) {
+            throw new InvalidSessionException("Session not found");
+        }
+
         return userRepository.getById(session.getUserid().getId());
     }
 }

@@ -1,10 +1,12 @@
 package service;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import exceptions.UserAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import model.dto.SignInDto;
 import model.dto.SignUpDto;
 import model.entity.User;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -26,7 +28,11 @@ public class AuthService {
         user.setLogin(signUpDto.getUsername());
         user.setPassword(hashedPassword);
 
-        userService.save(user);
+        try { // race condition protection
+            userService.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new UserAlreadyExistsException("Пользователь с таким логином уже существует");
+        }
     }
 
     public boolean isPasswordCorrect(SignInDto signInDto) {

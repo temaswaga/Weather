@@ -2,8 +2,10 @@ package controller.ExceptionHandler;
 
 import exceptions.EmptyResultDataAccessException;
 import exceptions.InvalidSessionException;
+import exceptions.UserAlreadyExistsException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import model.dto.SignUpDto;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,6 +29,12 @@ public class GlobalExceptionHandler {
     public ModelAndView handleException(EmptyResultDataAccessException ex, Model model) {
         model.addAttribute("error", ex.getMessage());
         return new ModelAndView("redirect:/");
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ModelAndView handleUserExists(UserAlreadyExistsException ex) {
+        ex.printStackTrace();
+        return new ModelAndView("error");
     }
 
     @ExceptionHandler(Exception.class)

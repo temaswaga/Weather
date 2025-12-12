@@ -26,27 +26,25 @@ public class LocationService {
         return LocationMapper.toDtoList(locationEntities);
     }
 
-        public List<WeatherDto> getUsersLocationsWithWeatherBySessionId(String sessionId) {
-        List<WeatherDto> weatherDtos = new ArrayList<>();
-        List<LocationDto> savedLocations = getUsersLocationsBySessionId(sessionId);
+    public List<WeatherDto> getUsersLocationsWithWeatherBySessionId(String sessionId) {
+    List<WeatherDto> weatherDtos = new ArrayList<>();
+    List<LocationDto> savedLocations = getUsersLocationsBySessionId(sessionId);
 
-        for (LocationDto location : savedLocations) {
-            WeatherDto weather = weatherApiService.getWeather(location.getLat(), location.getLon());
+    for (LocationDto location : savedLocations) {
+        WeatherDto weather = weatherApiService.getWeather(location.getLat(), location.getLon());
 
-            if (weather == null) {
-                weather = new WeatherDto();
-            }
-
-            weather.setId(location.getId());      // Чтобы работала кнопка удаления!
-            weather.setName(location.getName());  // Чтобы было правильное имя
-
-            weatherDtos.add(weather);
+        if (weather == null) {
+            weather = new WeatherDto();
         }
 
-        return weatherDtos;
+        weather.setId(location.getId());
+        weather.setName(location.getName());
+        weatherDtos.add(weather);
     }
 
-    @Transactional
+    return weatherDtos;
+    }
+
     public void addLocation (LocationDto locationDto, String sessionId){
         User userId = userService.getUserBySessionId(sessionId);
         Location location = LocationMapper.toEntity(locationDto);

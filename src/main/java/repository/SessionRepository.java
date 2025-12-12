@@ -22,7 +22,7 @@ public class SessionRepository {
     }
 
     public Session getById(UUID sessionId) {
-        String jpql = "SELECT s FROM Session s WHERE s.id = :idParam";
+        String jpql = "SELECT s FROM Session s WHERE s.id = :idParam AND expiresat > CURRENT_TIMESTAMP";
 
         return entityManager.createQuery(jpql, Session.class)
                 .setParameter("idParam", sessionId)

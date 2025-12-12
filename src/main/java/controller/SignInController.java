@@ -2,6 +2,7 @@ package controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import model.dto.SignInDto;
 import model.entity.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +16,12 @@ import service.CookieService;
 import service.LocationService;
 import service.SessionService;
 
-
+@RequiredArgsConstructor
 @Controller
 public class SignInController {
     private final CookieService cookieService;
     private final SessionService sessionService;
     private final AuthService authService;
-
-    @Autowired
-    public SignInController(CookieService cookieService, SessionService sessionService, AuthService authService, LocationService locationService) {
-        this.cookieService = cookieService;
-        this.sessionService = sessionService;
-        this.authService = authService;
-    }
 
     @GetMapping("/sign-in")
     public String getLoginPage(@ModelAttribute("signInDto") SignInDto signInDto) {

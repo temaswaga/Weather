@@ -1,13 +1,10 @@
 package repository;
 
-import model.entity.Session;
 import model.entity.User;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Repository
 @Transactional
@@ -25,7 +22,7 @@ public class UserRepository {
 
         return entityManager.createQuery(jpql, User.class)
                 .setParameter("idParam", id)
-                .getSingleResult();
+                .getSingleResultOrNull();
     }
 
     public User getByLogin(String login) {

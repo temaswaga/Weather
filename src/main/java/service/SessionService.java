@@ -13,18 +13,18 @@ import repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class SessionService{
     private final SessionRepository sessionRepository;
     private final UserRepository userRepository;
 
-    @Transactional
     public Session createSession(SignInDto signInDto) {
         User user = userRepository.getByLogin(signInDto.getUsername());
 
         if (user == null) {
-            throw new RuntimeException("Пользователь не найден");
+            throw new RuntimeException("User not found");
         }
 
         Session session = new Session();

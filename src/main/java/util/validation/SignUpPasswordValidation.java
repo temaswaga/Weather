@@ -3,7 +3,7 @@ package util.validation;
 public class SignUpPasswordValidation {
     public static String validate(String password) {
         if (passwordTooShort(password)) {
-//            return "Password must be at least 6 characters";
+//            return "Password must be at least 6 characters"; not necessary because of hibernate's validation
             return null;
         } else if (passwordHaveNoUpperCaseCharacter(password)) {
             return "Password must contain at least one uppercase character";

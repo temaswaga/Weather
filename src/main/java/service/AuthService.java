@@ -8,17 +8,14 @@ import model.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import repository.UserRepository;
 import util.validation.SignUpPasswordValidation;
 
-import java.util.Objects;
-
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class AuthService {
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    @Transactional
     public void saveUserToDb(SignUpDto signUpDto) {
         User user = new User();
 
@@ -29,11 +26,11 @@ public class AuthService {
         user.setLogin(signUpDto.getUsername());
         user.setPassword(hashedPassword);
 
-        userRepository.save(user);
+        userService.save(user);
     }
 
     public boolean isPasswordCorrect(SignInDto signInDto) {
-        User user = userRepository.getByLogin(signInDto.getUsername());
+        User user = userService.getByLogin(signInDto.getUsername());
 
         if (user == null) {
             return false;
@@ -49,13 +46,14 @@ public class AuthService {
 
     public boolean areUsersDetailsValid(SignUpDto user, BindingResult bindingResult) {
 
-        if (userRepository.loginExists(user.getUsername()) != null) {
+        if (userService.getByLogin(user.getUsername()) != null) {
             bindingResult.rejectValue("username", "error.username.exists", "Username already exists");
             return false;
         }
 
-        if (SignUpPasswordValidation.validate(user.getPassword()) != null) {
-            bindingResult.rejectValue("password", "error.password.valid", Objects.requireNonNull(SignUpPasswordValidation.validate(user.getPassword())));
+        String errorMessage = SignUpPasswordValidation.validate(user.getPassword());
+        if (errorMessage != null) {
+            bindingResult.rejectValue("password", "error.password.valid", errorMessage);
         }
 
         if (!user.getPassword().equals(user.getRepeatedPassword())) {

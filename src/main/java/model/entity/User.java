@@ -19,9 +19,4 @@ public class User {
 
     @Column(name = "password", length = 70)
     private String password;
-
-    public User(String password, String login) {
-        this.password = password;
-        this.login = login;
-    }
 }

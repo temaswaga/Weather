@@ -24,4 +24,5 @@ Build Tool: Maven.
 Server: Apache Tomcat 9/10/11.
 
 External API: OpenWeatherMap.
-<img width="2400" height="1600" alt="image" src="https://github.com/user-attachments/assets/4f9d560f-d44a-4bc9-9216-44f49154e7e6" />
+<img width="1916" height="1080" alt="image" src="https://github.com/user-attachments/assets/273834d4-687f-45fc-b8ae-144631725ecf" />
+

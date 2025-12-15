@@ -1,5 +1,6 @@
 package service;
 
+import exceptions.UnauthorizedDeleteAttemptException;
 import lombok.RequiredArgsConstructor;
 import util.mapper.LocationMapper;
 import model.dto.LocationDto;
@@ -53,8 +54,15 @@ public class LocationService {
         locationRepository.save(location);
     }
 
-    public void deleteLocation(long id){
-        locationRepository.deleteLocation(id);
+    public void deleteLocation(long id, String sessionId){
+        User userId = userService.getUserBySessionId(sessionId);
+        Location location = locationRepository.getById(id);
+
+        if (location.getUserid().equals(userId)) {
+            locationRepository.deleteLocation(id);
+        } else {
+            throw new UnauthorizedDeleteAttemptException("Attempt to delete a location that does not belong to the user");
+        }
     }
 }
 

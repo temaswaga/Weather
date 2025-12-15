@@ -25,9 +25,7 @@ public class SchedulerConfig implements SchedulingConfigurer {
         scheduler.setThreadNamePrefix("scheduler-");
         scheduler.setAwaitTerminationSeconds(30);
         scheduler.setWaitForTasksToCompleteOnShutdown(true);
-        scheduler.setErrorHandler(throwable -> {
-            System.err.println("Error in scheduled task: " + throwable.getMessage());
-        });
+        scheduler.setErrorHandler(throwable -> System.err.println("Error in scheduled task: " + throwable.getMessage()));
         return scheduler;
     }
 }

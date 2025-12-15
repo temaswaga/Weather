@@ -1,7 +1,5 @@
 package controller;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import model.dto.LocationDto;
 import org.springframework.stereotype.Controller;
@@ -20,7 +18,7 @@ public class WeatherController {
     private final WeatherApiService weatherApiService;
 
     @GetMapping("/")
-    public String index(HttpServletResponse response, @CookieValue(value = "MY_SESSION_ID", required = false) String sessionId, Model model) {
+    public String index(@CookieValue(value = "MY_SESSION_ID", required = false) String sessionId, Model model) {
         if (sessionId != null) {
             model.addAttribute("user", userService.getUserBySessionId(sessionId));
             model.addAttribute("locations", locationService.getUsersLocationsWithWeatherBySessionId(sessionId));
@@ -47,8 +45,8 @@ public class WeatherController {
     }
 
     @PostMapping("/location/delete")
-    public String deleteLocation(@RequestParam("locationId") long id) {
-        locationService.deleteLocation(id);
+    public String deleteLocation(@CookieValue(value = "MY_SESSION_ID", required = false) String sessionId, @RequestParam("locationId") long id) {
+        locationService.deleteLocation(id, sessionId);
         return "redirect:/";
     }
 

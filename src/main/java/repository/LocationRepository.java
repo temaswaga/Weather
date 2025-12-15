@@ -33,8 +33,14 @@ public class LocationRepository {
     public void deleteLocation(long id) {
         Location location = entityManager.find(Location.class, id);
 
+        entityManager.remove(location);
+    }
+
+    public Location getById(long id) {
+        Location location = entityManager.find(Location.class, id);
+
         if (location != null) {
-            entityManager.remove(location);
+            return location;
         } else {
             throw new EmptyResultDataAccessException("Location not found");
         }

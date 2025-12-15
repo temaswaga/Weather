@@ -2,10 +2,10 @@ package controller.ExceptionHandler;
 
 import exceptions.EmptyResultDataAccessException;
 import exceptions.InvalidSessionException;
+import exceptions.UnauthorizedDeleteAttemptException;
 import exceptions.UserAlreadyExistsException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import model.dto.SignUpDto;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,14 +32,22 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ModelAndView handleUserExists(UserAlreadyExistsException ex) {
-        ex.printStackTrace();
+    public ModelAndView handleUserExists(UserAlreadyExistsException ex, Model model, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        model.addAttribute("error", ex.getMessage());
+        return new ModelAndView("error");
+    }
+
+    @ExceptionHandler(UnauthorizedDeleteAttemptException.class)
+    public ModelAndView handleUnauthorizedDeleteAttempt(UnauthorizedDeleteAttemptException ex, Model model, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        model.addAttribute("error", ex.getMessage());
         return new ModelAndView("error");
     }
 
     @ExceptionHandler(Exception.class)
-    public ModelAndView handleGlobalError(Exception ex) {
-        ex.printStackTrace();
+    public ModelAndView handleGlobalError(HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         return new ModelAndView("error");
     }
 }
